@@ -1,0 +1,934 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f7f2">
+
+    <meta name="description"
+          content="PIVOT — An interactive SQL-powered sales intelligence dashboard.">
+
+    <title>PIVOT — Sales Intelligence</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <!-- =====================================
+             SIDEBAR
+        ====================================== -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <a href="#overview" class="brand">
+                <span class="brand-mark">
+                    <svg viewBox="0 0 42 42" fill="none" aria-hidden="true">
+                        <rect x="2" y="2" width="38" height="38" rx="12"
+                              fill="#526DFF"/>
+                        <path d="M12 28V14H19.5C23.2 14 25.5 16 25.5 19.2C25.5 22.4 23.2 24.4 19.5 24.4H16.5V28H12Z"
+                              fill="white"/>
+                        <path d="M27 14H31V28H27V14Z" fill="#CDEFD9"/>
+                        <circle cx="29" cy="10.5" r="2" fill="#CDEFD9"/>
+                    </svg>
+                </span>
+
+                <span class="brand-word">PIVOT<span>.</span></span>
+            </a>
+
+
+            <div class="sidebar-caption">ANALYTICS WORKSPACE</div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+
+                <a href="#overview" class="nav-item active" data-section="overview">
+                    <span class="nav-icon">◫</span>
+                    <span>Overview</span>
+                    <span class="nav-active-dot"></span>
+                </a>
+
+                <a href="#revenue" class="nav-item" data-section="revenue">
+                    <span class="nav-icon">⌁</span>
+                    <span>Revenue trends</span>
+                </a>
+
+                <a href="#categories" class="nav-item" data-section="categories">
+                    <span class="nav-icon">◉</span>
+                    <span>Categories</span>
+                </a>
+
+                <a href="#regions" class="nav-item" data-section="regions">
+                    <span class="nav-icon">⌖</span>
+                    <span>Regions</span>
+                </a>
+
+                <a href="#products" class="nav-item" data-section="products">
+                    <span class="nav-icon">▤</span>
+                    <span>Products</span>
+                </a>
+
+                <a href="#transactions" class="nav-item" data-section="transactions">
+                    <span class="nav-icon">↗</span>
+                    <span>Transactions</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-spacer"></div>
+
+
+            <!-- DATABASE CONNECTION CARD -->
+
+            <div class="database-card">
+
+                <div class="database-card-top">
+                    <span class="database-icon">◉</span>
+                    <span class="database-status">
+                        <span class="status-dot"></span>
+                        Connected
+                    </span>
+                </div>
+
+                <strong>Sales database</strong>
+
+                <span class="database-detail">SQLite · pivot.db</span>
+
+                <div class="database-divider"></div>
+
+                <span class="database-footnote">
+                    Your insights, backed by SQL.
+                </span>
+
+            </div>
+
+
+            <div class="sidebar-user">
+
+                <div class="user-avatar">P</div>
+
+                <div class="user-details">
+                    <strong>PIVOT Analytics</strong>
+                    <span>Demo workspace</span>
+                </div>
+
+                <span class="user-menu">···</span>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================
+             MAIN APPLICATION
+        ====================================== -->
+
+        <main class="main-content" id="overview">
+
+
+            <!-- TOP NAVIGATION -->
+
+            <header class="topbar">
+
+                <button class="mobile-menu-button"
+                        id="mobileMenuButton"
+                        aria-label="Open navigation">
+                    ☰
+                </button>
+
+                <div class="breadcrumb">
+                    <span>Workspace</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <strong>Sales intelligence</strong>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="connection-indicator">
+                        <span class="status-dot"></span>
+                        Database connected
+                    </div>
+
+                    <span class="topbar-divider"></span>
+
+                    <div class="topbar-date" id="currentDate">
+                        Loading date...
+                    </div>
+
+                    <button class="topbar-refresh"
+                            id="refreshButton"
+                            title="Refresh dashboard"
+                            aria-label="Refresh dashboard">
+                        ↻
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =====================================
+                 PAGE INTRO
+            ====================================== -->
+
+            <section class="page-intro">
+
+                <div class="intro-copy">
+
+                    <div class="eyebrow">
+                        <span class="eyebrow-line"></span>
+                        SALES PERFORMANCE / OVERVIEW
+                    </div>
+
+                    <h1>
+                        Numbers tell stories.
+                        <span>Find yours.</span>
+                    </h1>
+
+                    <p>
+                        Your business at a glance. Explore sales patterns,
+                        discover what drives revenue, and turn data into decisions.
+                    </p>
+
+                </div>
+
+                <div class="intro-side">
+
+                    <div class="report-badge">
+                        <span class="report-badge-icon">✳</span>
+                        <div>
+                            <strong>Insight mode</strong>
+                            <span>SQL-powered analytics</span>
+                        </div>
+                    </div>
+
+                    <span class="demo-label">
+                        FICTIONAL DATASET · 2025
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 FILTER TOOLBAR
+            ====================================== -->
+
+            <section class="filter-panel" aria-label="Dashboard filters">
+
+                <div class="filter-heading">
+                    <span class="filter-heading-icon">☷</span>
+                    <strong>Refine your view</strong>
+                    <span class="filter-heading-note">FILTERS</span>
+                </div>
+
+                <div class="filter-controls">
+
+                    <label class="filter-control date-filter">
+                        <span>Date range</span>
+
+                        <div class="date-inputs">
+                            <input type="date"
+                                   id="startDate"
+                                   aria-label="Start date">
+
+                            <span>to</span>
+
+                            <input type="date"
+                                   id="endDate"
+                                   aria-label="End date">
+                        </div>
+                    </label>
+
+
+                    <label class="filter-control">
+                        <span>Region</span>
+
+                        <select id="regionSelect">
+                            <option value="All">All regions</option>
+                        </select>
+                    </label>
+
+
+                    <label class="filter-control">
+                        <span>Category</span>
+
+                        <select id="categorySelect">
+                            <option value="All">All categories</option>
+                        </select>
+                    </label>
+
+
+                    <label class="filter-control threshold-filter">
+                        <span>Minimum category revenue</span>
+
+                        <select id="minRevenue">
+                            <option value="0">No minimum</option>
+                            <option value="500000">₹5 lakh</option>
+                            <option value="1000000" selected>₹10 lakh</option>
+                            <option value="2000000">₹20 lakh</option>
+                            <option value="5000000">₹50 lakh</option>
+                        </select>
+                    </label>
+
+                </div>
+
+
+                <div class="filter-actions">
+
+                    <button class="apply-filter-button" id="applyFilters">
+                        Apply filters
+                        <span>→</span>
+                    </button>
+
+                    <button class="reset-filter-button" id="resetFilters">
+                        Reset
+                    </button>
+
+                    <span class="filter-feedback" id="filterFeedback">
+                        Showing all available sales
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 KEY PERFORMANCE INDICATORS
+            ====================================== -->
+
+            <section class="kpi-section" aria-label="Key performance indicators">
+
+                <div class="section-overline">
+                    <span>THE BIG PICTURE</span>
+                    <span class="overline-dot"></span>
+                    <span>LIVE QUERY RESULTS</span>
+                </div>
+
+
+                <div class="kpi-grid">
+
+
+                    <!-- REVENUE -->
+
+                    <article class="kpi-card revenue-kpi">
+
+                        <div class="kpi-card-top">
+                            <span class="kpi-label">TOTAL REVENUE</span>
+                            <span class="kpi-icon revenue-icon">₹</span>
+                        </div>
+
+                        <div class="kpi-value"
+                             id="totalRevenue"
+                             data-format="currency">
+                            —
+                        </div>
+
+                        <div class="kpi-bottom">
+                            <span class="kpi-marker blue-marker"></span>
+                            <span>Completed sales</span>
+                        </div>
+
+                    </article>
+
+
+                    <!-- ORDERS -->
+
+                    <article class="kpi-card">
+
+                        <div class="kpi-card-top">
+                            <span class="kpi-label">TOTAL ORDERS</span>
+                            <span class="kpi-icon order-icon">▤</span>
+                        </div>
+
+                        <div class="kpi-value" id="totalOrders">—</div>
+
+                        <div class="kpi-bottom">
+                            <span class="kpi-marker coral-marker"></span>
+                            <span>Completed orders</span>
+                        </div>
+
+                    </article>
+
+
+                    <!-- AVERAGE ORDER -->
+
+                    <article class="kpi-card">
+
+                        <div class="kpi-card-top">
+                            <span class="kpi-label">AVERAGE ORDER VALUE</span>
+                            <span class="kpi-icon average-icon">⌁</span>
+                        </div>
+
+                        <div class="kpi-value"
+                             id="averageOrderValue"
+                             data-format="currency">
+                            —
+                        </div>
+
+                        <div class="kpi-bottom">
+                            <span class="kpi-marker purple-marker"></span>
+                            <span>Revenue per order</span>
+                        </div>
+
+                    </article>
+
+
+                    <!-- UNITS -->
+
+                    <article class="kpi-card">
+
+                        <div class="kpi-card-top">
+                            <span class="kpi-label">UNITS SOLD</span>
+                            <span class="kpi-icon units-icon">◈</span>
+                        </div>
+
+                        <div class="kpi-value" id="unitsSold">—</div>
+
+                        <div class="kpi-bottom">
+                            <span class="kpi-marker mint-marker"></span>
+                            <span>Quantity purchased</span>
+                        </div>
+
+                    </article>
+
+
+                    <!-- CUSTOMERS -->
+
+                    <article class="kpi-card">
+
+                        <div class="kpi-card-top">
+                            <span class="kpi-label">UNIQUE CUSTOMERS</span>
+                            <span class="kpi-icon customer-icon">♙</span>
+                        </div>
+
+                        <div class="kpi-value" id="totalCustomers">—</div>
+
+                        <div class="kpi-bottom">
+                            <span class="kpi-marker dark-marker"></span>
+                            <span>Distinct buyers</span>
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 REVENUE ANALYTICS
+            ====================================== -->
+
+            <section class="analytics-grid" id="revenue">
+
+
+                <!-- MONTHLY REVENUE CHART -->
+
+                <article class="panel revenue-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <span class="panel-eyebrow">REVENUE INTELLIGENCE</span>
+                            <h2>Sales over time<span>.</span></h2>
+                            <p>Understand how your revenue moves across the calendar.</p>
+                        </div>
+
+                        <div class="chart-period-label" id="chartPeriodLabel">
+                            2025
+                        </div>
+
+                    </div>
+
+
+                    <div class="revenue-chart-summary">
+
+                        <div>
+                            <span class="chart-summary-label">PERIOD REVENUE</span>
+                            <strong id="chartTotalRevenue">₹ —</strong>
+                        </div>
+
+                        <div class="chart-legend">
+                            <span class="legend-line"></span>
+                            Monthly revenue
+                        </div>
+
+                    </div>
+
+
+                    <div class="revenue-chart-wrapper">
+
+                        <div class="chart-y-axis" id="revenueYAxis">
+                            <span>—</span>
+                            <span>—</span>
+                            <span>—</span>
+                            <span>—</span>
+                            <span>—</span>
+                        </div>
+
+                        <div class="revenue-chart-content">
+
+                            <svg id="revenueChart"
+                                 viewBox="0 0 760 245"
+                                 preserveAspectRatio="none"
+                                 role="img"
+                                 aria-label="Monthly revenue trend chart">
+
+                                <defs>
+
+                                    <linearGradient id="revenueAreaGradient"
+                                                    x1="0" y1="0"
+                                                    x2="0" y2="1">
+
+                                        <stop offset="0%"
+                                              stop-color="#526DFF"
+                                              stop-opacity="0.25"/>
+
+                                        <stop offset="100%"
+                                              stop-color="#526DFF"
+                                              stop-opacity="0.01"/>
+
+                                    </linearGradient>
+
+                                </defs>
+
+                                <g id="revenueGrid"></g>
+
+                                <path id="revenueArea"
+                                      fill="url(#revenueAreaGradient)"></path>
+
+                                <path id="revenueLine"
+                                      fill="none"
+                                      stroke="#526DFF"
+                                      stroke-width="3.5"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+
+                                <g id="revenuePoints"></g>
+
+                            </svg>
+
+                            <div class="chart-hover-tooltip" id="revenueTooltip">
+
+                                <strong id="revenueTooltipValue">₹0</strong>
+                                <span id="revenueTooltipLabel">Month</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-x-axis" id="revenueXAxis"></div>
+
+
+                    <div class="chart-footer-insight">
+                        <span class="insight-sparkle">✳</span>
+                        <p id="revenueInsight">
+                            Loading your revenue insights...
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <!-- CATEGORY MIX -->
+
+                <article class="panel category-panel" id="categories">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <span class="panel-eyebrow">PRODUCT MIX</span>
+                            <h2>Where money moves<span>.</span></h2>
+                            <p>Revenue contribution by category.</p>
+                        </div>
+
+                        <span class="panel-menu-icon">···</span>
+
+                    </div>
+
+
+                    <div class="donut-container">
+
+                        <svg id="categoryChart"
+                             viewBox="0 0 220 220"
+                             role="img"
+                             aria-label="Category revenue distribution">
+
+                            <circle
+                                cx="110"
+                                cy="110"
+                                r="78"
+                                fill="none"
+                                stroke="#eef0f5"
+                                stroke-width="24">
+                            </circle>
+
+                            <g id="categoryDonutSegments"
+                               transform="rotate(-90 110 110)">
+                            </g>
+
+                        </svg>
+
+
+                        <div class="donut-center">
+
+                            <span>TOTAL REVENUE</span>
+                            <strong id="categoryDonutTotal">₹ —</strong>
+                            <small>Across categories</small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="category-legend" id="categoryLegend">
+
+                        <div class="chart-empty">
+                            Category data will appear here.
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =====================================
+                 REGIONAL INTELLIGENCE
+            ====================================== -->
+
+            <section class="regional-section" id="regions">
+
+                <div class="section-heading-row">
+
+                    <div>
+                        <span class="panel-eyebrow">GEOGRAPHICAL PERFORMANCE</span>
+                        <h2>Regional intelligence<span>.</span></h2>
+                        <p>Discover where customers are contributing the most revenue.</p>
+                    </div>
+
+                    <span class="ranking-label">
+                        RANKED BY REVENUE ↓
+                    </span>
+
+                </div>
+
+
+                <div class="regional-grid">
+
+                    <article class="panel region-panel">
+
+                        <div class="region-panel-heading">
+                            <div>
+                                <strong>Revenue by region</strong>
+                                <span>Regional sales comparison</span>
+                            </div>
+
+                            <span class="region-unit">INR</span>
+                        </div>
+
+
+                        <div class="region-bars" id="regionBars">
+
+                            <div class="chart-empty">
+                                Regional performance will appear here.
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="regional-highlight">
+
+                        <div class="highlight-top">
+                            <span>✳</span>
+                            <span>TOP PERFORMING REGION</span>
+                        </div>
+
+                        <div class="highlight-globe" aria-hidden="true">
+                            <div class="globe-circle"></div>
+                            <div class="globe-cross"></div>
+                            <div class="globe-dot"></div>
+                        </div>
+
+                        <div class="highlight-content">
+
+                            <span class="highlight-caption">
+                                Revenue leader
+                            </span>
+
+                            <strong id="topRegionName">—</strong>
+
+                            <span class="highlight-revenue"
+                                  id="topRegionRevenue">
+                                ₹ —
+                            </span>
+
+                            <span class="highlight-description"
+                                  id="topRegionOrders">
+                                Calculating regional performance...
+                            </span>
+
+                        </div>
+
+                        <div class="highlight-decoration">P.</div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 TOP PRODUCTS
+            ====================================== -->
+
+            <section class="table-section" id="products">
+
+                <div class="section-heading-row">
+
+                    <div>
+                        <span class="panel-eyebrow">PRODUCT INTELLIGENCE</span>
+                        <h2>Products that perform<span>.</span></h2>
+                        <p>Explore products ranked by actual revenue generated.</p>
+                    </div>
+
+                    <div class="table-count" id="productCount">
+                        0 PRODUCTS
+                    </div>
+
+                </div>
+
+
+                <article class="panel data-table-panel">
+
+                    <div class="table-toolbar">
+
+                        <div class="table-search">
+
+                            <span>⌕</span>
+
+                            <input type="search"
+                                   id="productSearch"
+                                   placeholder="Search products or categories..."
+                                   aria-label="Search products">
+
+                        </div>
+
+                        <div class="table-toolbar-note">
+                            <span class="status-dot"></span>
+                            SQL QUERY RESULTS
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-scroll">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>PRODUCT</th>
+                                    <th>CATEGORY</th>
+                                    <th>UNITS SOLD</th>
+                                    <th>ORDERS</th>
+                                    <th>AVERAGE PRICE</th>
+                                    <th class="align-right">REVENUE</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="productTableBody">
+
+                                <tr>
+                                    <td colspan="6" class="loading-cell">
+                                        Loading product performance...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="table-footer">
+                        <span id="productTableFooter">
+                            Showing top products
+                        </span>
+
+                        <span>Sorted by revenue</span>
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =====================================
+                 HIGH VALUE TRANSACTIONS
+            ====================================== -->
+
+            <section class="table-section transaction-section"
+                     id="transactions">
+
+                <div class="section-heading-row">
+
+                    <div>
+                        <span class="panel-eyebrow">ORDER INTELLIGENCE</span>
+                        <h2>High-value transactions<span>.</span></h2>
+                        <p>Completed orders generating at least ₹10,000.</p>
+                    </div>
+
+                    <span class="table-count" id="orderCount">
+                        0 ORDERS
+                    </span>
+
+                </div>
+
+
+                <article class="panel data-table-panel">
+
+                    <div class="table-scroll">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>ORDER ID</th>
+                                    <th>ORDER DATE</th>
+                                    <th>CUSTOMER</th>
+                                    <th>REGION</th>
+                                    <th>UNITS</th>
+                                    <th class="align-right">ORDER VALUE</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="orderTableBody">
+
+                                <tr>
+                                    <td colspan="6" class="loading-cell">
+                                        Loading transactions...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="table-footer">
+                        <span>Filtered using SQL aggregation</span>
+                        <span>Completed orders only</span>
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =====================================
+                 BUSINESS INSIGHT
+            ====================================== -->
+
+            <section class="insight-section">
+
+                <div class="insight-icon">✳</div>
+
+                <div class="insight-content">
+
+                    <span>THE PIVOT PERSPECTIVE</span>
+
+                    <h3 id="insightTitle">
+                        Your data is telling a story.
+                    </h3>
+
+                    <p id="insightDescription">
+                        Analyzing category, regional, and product performance...
+                    </p>
+
+                </div>
+
+                <span class="insight-arrow">↗</span>
+
+            </section>
+
+
+            <!-- =====================================
+                 FOOTER
+            ====================================== -->
+
+            <footer class="app-footer">
+
+                <span class="footer-brand">
+                    PIVOT<span>.</span> SALES INTELLIGENCE
+                </span>
+
+                <span>Built with SQL, Python and curiosity.</span>
+
+                <span>DEMO DATA · 2025</span>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================
+         NOTIFICATIONS
+    ====================================== -->
+
+    <div class="toast-container"
+         id="toastContainer"
+         aria-live="polite"
+         aria-atomic="true">
+    </div>
+
+
+    <!-- =====================================
+         LOADING OVERLAY
+    ====================================== -->
+
+    <div class="loading-overlay" id="loadingOverlay">
+
+        <div class="loading-content">
+
+            <div class="loading-symbol">P<span>.</span></div>
+
+            <div class="loading-spinner"></div>
+
+            <strong>Connecting the dots...</strong>
+
+            <span>Querying your sales database</span>
+
+        </div>
+
+    </div>
+
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>
