@@ -1,0 +1,9 @@
+
+services:
+  - type: web
+    name: pivot-sales-intelligence
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python database/seed.py && gunicorn app:app
+    autoDeploy: true
